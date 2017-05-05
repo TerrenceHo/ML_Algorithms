@@ -1,3 +1,4 @@
+from DecisionTree import DecisionTree
 from random import seed
 from random import randrange
 from csv import reader
@@ -5,6 +6,12 @@ import os
 
 
 def main():
+    return 0
+
+def load_csv(filename):
+    
+
+def test():
     # Functions to test Decision Tree as I build it
     os.system("clear")
     Tree = DecisionTree() # Build Tree Object
@@ -46,7 +53,7 @@ def main():
         print('Expected = %d, Got = %d' % (row[-1], prediction))
 
 if __name__ == '__main__':
-    main()
+    test()
 
 
 
