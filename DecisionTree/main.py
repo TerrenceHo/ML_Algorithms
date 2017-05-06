@@ -1,15 +1,11 @@
-from DecisionTree import DecisionTree
+from DecisionTree import * # import class and all helper functions
 from random import seed
 from random import randrange
 from csv import reader
 import os
 
 
-def main():
-    return 0
 
-def load_csv(filename):
-    
 
 def test():
     # Functions to test Decision Tree as I build it
@@ -51,6 +47,20 @@ def test():
     for row in dataset:
         prediction = Tree.predict(stump, row)
         print('Expected = %d, Got = %d' % (row[-1], prediction))
+
+def main():
+    DTree = DecisionTree()
+
+    seed(1)
+    dataset = load_csv('data_banknote_authentication.csv')
+    for i in range(len(dataset[0])):
+        str_column_to_float(dataset, i)
+    n_folds = 5
+    max_depth = 5
+    min_size = 10
+    scores = evaluate_algorithm(dataset, decision_tree, n_folds, max_depth, min_size)
+    print('Scores: %s' % scores)
+    print('Mean Accuracy: %.3f%%' % (sum(scores)/float(len(scores))))
 
 if __name__ == '__main__':
     test()
