@@ -1,3 +1,8 @@
+from random import seed
+from random import randrange
+from csv import reader
+
+
 class DecisionTree(object):
     # needs entropy critierion
     def __init__(self):
@@ -96,38 +101,45 @@ class DecisionTree(object):
 
     # Split a dataset into k folds
     def cross_validation_split(self, dataset, n_folds):
-	dataset_split = list()
-	dataset_copy = list(dataset)
-	fold_size = int(len(dataset) / n_folds)
-	for i in range(n_folds):
+        dataset_split = list()
+        dataset_copy = list(dataset)
+        fold_size = int(len(dataset) / n_folds) 
+        for i in range(n_folds):
             fold = list()
             while len(fold) < fold_size:
                 index = randrange(len(dataset_copy))
                 fold.append(dataset_copy.pop(index))
             dataset_split.append(fold)
-	return dataset_split
+        return dataset_split
 
     def evaluate_algorithm(self, dataset, algorithm, n_folds, *args):
-	folds = cross_validation_split(dataset, n_folds)
-	scores = list()
-	for fold in folds:
+        folds = self.cross_validation_split(dataset, n_folds)
+        scores = list()
+        for fold in folds:
             train_set = list(folds)
             train_set.remove(fold)
             train_set = sum(train_set, [])
             test_set = list()
             for row in fold:
-		row_copy = list(row)
-		test_set.append(row_copy)
-		row_copy[-1] = None
+                row_copy = list(row)
+                test_set.append(row_copy)
+                row_copy[-1] = None
             predicted = algorithm(train_set, test_set, *args)
             actual = [row[-1] for row in fold]
             accuracy = accuracy_metric(actual, predicted)
             scores.append(accuracy)
-	return scores
+        return scores
 
+    def decision_tree(self, train, test, max_depth, min_size):
+        tree = self.build_tree(train, max_depth, min_size)
+        predictions = list()
+        for row in test:
+            prediction = self.predict(tree, row)
+            predictions.append(prediction)
+        return predictions
 
 def load_csv(filename):
-    file = open(filename, "rb")
+    file = open(filename, "r")
     lines = reader(file)
     dataset = list(lines)
     return dataset
