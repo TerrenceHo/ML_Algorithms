@@ -65,7 +65,7 @@ def main():
     print("""Beginning Evaluating Cross Validation Splits, with %d folds, a max depth of %d, and a minimum size of %d""" % (n_folds, max_depth, min_size))
     folds = cross_validation_split(dataset, n_folds)
     scores = list()
-    i = 0 # keep track of which fold during execution
+    i = 1 # keep track of which fold during execution
     for fold in folds:
         train_set = list(folds)
         train_set.remove(fold)
