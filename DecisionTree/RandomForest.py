@@ -1,4 +1,5 @@
 from DecisionTree import DecisionTree
+from random import randrange
 
 
 class RandomForest(object):
@@ -7,7 +8,7 @@ class RandomForest(object):
         self.max_depth = max_depth
         self.min_size = min_size
         self.num_trees = num_trees
-    def split_data(dataset, num_trees):
+    def split_data(self, dataset, num_trees):
         # function that splits the data randomly based on how many trees are
         # wanted.  returns a list that contains different lists of randomly
         # selected data.
@@ -15,13 +16,13 @@ class RandomForest(object):
         dataset_split = list()
         dataset_copy = list(dataset)
         split_size = int(len(dataset) / num_trees)
-        for i in range(num_trees):
+        for rand_data in range(num_trees):
             rand_data_list = list()
-            while len(fold) < fold_size:
-                index = ranrange(len(dataset_copy))
+            while len(rand_data) < split_size:
+                index = randrange(len(dataset_copy))
                 rand_data_list.append(dataset_copy.pop(index))
             dataset_split.append(rand_data_list)
-        return dataset_splt
+        return dataset_split
 
     def fit(self, train):
        # Takes in data as a list of lists, where each inner list is a subset of
@@ -32,7 +33,7 @@ class RandomForest(object):
         for data_set in range(len(train)):
             Tree = DecisionTree(self.max_depth, self.min_size)
             Tree.fit(data_set)
-            tree_list.append(Tree)
+            self.tree_list.append(Tree)
 
     def predict(self, row):
         # For each tree in the Forest, call it's trained tree and see what it
@@ -42,7 +43,6 @@ class RandomForest(object):
         for tree in range(len(self.tree_list)):
             prediction = tree.predict(row)
             predictions_list.append(prediction)
-
         return predictions_list
 
 
