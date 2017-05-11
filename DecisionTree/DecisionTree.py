@@ -119,12 +119,12 @@ class DecisionTree(object):
             node = self.root
         if row[node['index']] < node['value']:
             if isinstance(node['left'], dict):
-                return self.predict(node['left'], row)
+                return self.predict(row, node['left'])
             else:
                 return node['left']
         else:
             if isinstance(node['right'], dict):
-                return self.predict(node['right'], row)
+                return self.predict(row, node['right'])
             else:
                 return node['right']
 

@@ -1,7 +1,5 @@
-from DecisionTree import * # import class and all helper functions
-from random import seed
-from random import randrange
-from csv import reader
+from DecisionTree import DecisionTree # import class and all helper functions
+from utils import *
 import os
 
 
@@ -49,16 +47,46 @@ def test():
         print('Expected = %d, Got = %d' % (row[-1], prediction))
 
 def main():
-    DTree = DecisionTree()
-
-    seed(1)
-    dataset = load_csv('data_banknote_authentication.csv')
-    for i in range(len(dataset[0])):
-        str_column_to_float(dataset, i)
+    os.system('clear')
+    print("Starting Decision Tree Algorithm")
+    # parameters for the DecisionTree
     n_folds = 5
     max_depth = 5
     min_size = 10
-    scores = DTree.evaluate_algorithm(dataset, DTree.decision_tree, n_folds, max_depth, min_size)
+    Tree = DecisionTree(max_depth, min_size)
+
+    seed(1) # initialize Python's psuedorandom state
+    dataset = load_csv('data_banknote_authentication.csv')
+    # convert strings to floats
+    for i in range(len(dataset[0])):
+        str_column_to_float(dataset, i)
+
+    print("Data Loaded")
+    print("""Beginning Evaluating Cross Validation Splits, with %d folds, a max depth of %d, and a minimum size of %d""" % (n_folds, max_depth, min_size))
+    folds = cross_validation_split(dataset, n_folds)
+    scores = list()
+    i = 0 # keep track of which fold during execution
+    for fold in folds:
+        train_set = list(folds)
+        train_set.remove(fold)
+        train_set = sum(train_set, [])
+        test_set = list()
+        for row in fold:
+            row_copy = list(row)
+            test_set.append(row_copy)
+            row_copy[-1] = None
+        Tree.fit(train_set)
+        predictions = list()
+        for row in test_set:
+            prediction = Tree.predict(row)
+            predictions.append(prediction)
+        actual = [row[-1] for row in fold]
+        accuracy = accuracy_metric(actual, predictions)
+        scores.append(accuracy)
+
+        print("Evaluating Split: %d" % i)
+        i += 1
+
     print('Scores: %s' % scores)
     print('Mean Accuracy: %.3f%%' % (sum(scores)/float(len(scores))))
 
