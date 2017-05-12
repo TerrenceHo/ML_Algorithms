@@ -1,3 +1,4 @@
+from RandomForest import RandomForest
 from DecisionTree import DecisionTree # import class and all helper functions
 from utils import *
 import os
@@ -46,7 +47,7 @@ def test():
         prediction = Tree.predict(stump, row)
         print('Expected = %d, Got = %d' % (row[-1], prediction))
 
-def main():
+def main_tree():
     os.system('clear')
     print("Starting Decision Tree Algorithm")
     # parameters for the DecisionTree
@@ -90,9 +91,44 @@ def main():
     print('Scores: %s' % scores)
     print('Mean Accuracy: %.3f%%' % (sum(scores)/float(len(scores))))
 
+def main_random_tree():
+    os.system('clear')
+    print("Starting Random Forest Algorithm")
+    num_trees = 5
+    max_depth = 5
+    min_size = 10
+    Forest = RandomForest(num_trees, max_depth, min_size)
+
+    seed(1)
+    dataset = load_csv('data_banknote_authentication')
+
+    for i in range(len(dataset[0])):
+        str_column_to_float(dataset, i)
+
+    # generating test set
+    test_set = list()
+    test_size = int(len(dataset) / 10)
+    for i in range(test_size):
+        index = randrange(len(dataset_copy))
+        test_set.append(dataset.pop(index))
+
+    print("Data Loaded")
+    print("Beginning Evaluating Random Forest, with %d trees, max depth of %d, and a minimum size of %d" % (num_trees, max_depth, min_size))
+
+    train_set = Forest.split_data(dataset, num_trees)
+    Forest.fit(train_set)
+
+    predictions = list()
+    for row in test_set:
+        prediction = Forest(row)
+        predictions.append(prediction)
+
+    # TODO retrieve maximum vote from each prediction.
+    # Each prediction in predictions is a list of what each tree voted for.
+
 if __name__ == '__main__':
     # test()
-    main()
+    main_tree()
 
 
 
