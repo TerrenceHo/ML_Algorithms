@@ -118,17 +118,24 @@ def main_random_tree():
     train_set = Forest.split_data(dataset, num_trees)
     Forest.fit(train_set)
 
-    predictions = list()
+    mass_predictions = list()
     for row in test_set:
-        prediction = Forest(row)
-        predictions.append(prediction)
+        mass_prediction = Forest(row)
+        mass_predictions.append(mass_prediction)
 
     # TODO retrieve maximum vote from each prediction.
     # Each prediction in predictions is a list of what each tree voted for.
+    aggregate_predictions = list()
+    for mass_prediction in mass_predictions:
+        aggregate_prediction = most_common_element(prediction)
+
+    actual = [row[-1] for row in test_set]
+    accuracy = accuracy_metric(actual, predictions)
 
 if __name__ == '__main__':
     # test()
     main_tree()
+    # main_random_tree()
 
 
 
