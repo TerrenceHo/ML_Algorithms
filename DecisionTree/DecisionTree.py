@@ -2,9 +2,9 @@
 
 class DecisionTree(object):
     def __init__(self, max_depth, min_size):
-        self.root = None
-        self.max_depth = max_depth
-        self.min_size = min_size
+        self.root = None # holds our tree
+        self.max_depth = max_depth # max depth of trees
+        self.min_size = min_size # min size of 
 
     def gini_index(self, groups, class_values):
         # Return a cost funtion between 0 <= x <= 1, where 0 means you have split

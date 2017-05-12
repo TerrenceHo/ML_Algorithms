@@ -12,10 +12,12 @@ def load_csv(filename):
     return dataset
 
 def str_column_to_float(dataset, column):
+    # transforms our strings into floats
     for row in dataset:
         row[column] = float(row[column].strip())
 
 def cross_validation_split(dataset, n_folds):
+    # Splits data into n number of folds for training
     dataset_split = list()
     dataset_copy = list(dataset)
     fold_size = int(len(dataset) / n_folds)
@@ -29,6 +31,7 @@ def cross_validation_split(dataset, n_folds):
     return dataset_split
 
 def accuracy_metric(actual, predicted):
+    # Calculates how correct our predictions were
     correct = 0
     for i in range(len(actual)):
         if actual[i] == predicted[i]:
